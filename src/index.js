@@ -1,31 +1,52 @@
 
 const currentQuotesUrl = "http://localhost:3000/quotes";
+const currentLikesUrl = "http://localhost:3000/likes";
 const currentQuotesAndLikesUrl = "http://localhost:3000/quotes?_embed=likes";
-
-// const = 
 
 document.addEventListener("DOMContentLoaded", function () {
 
     fetchCurrentDbQuotes();
 
-    function fetchCurrentDbQuotes () {
-        let quotesArrOfObj = [];
-        fetch(currentQuotesUrl)
-        .then(res => res.json())
-        .then(arr => {
-            arr.forEach(obj => {
-                quotesArrOfObj.push(obj);
-            });
-        })
-        .then( () => console.log(quotesArrOfObj));
-    };
-    
-    function buildSingleQuoteDom () {
-
-    };
-
 
 });
+
+function fetchCurrentDbQuotes () {
+    let quotesArrOfObj = [];
+    fetch(currentQuotesUrl)
+    .then(res => res.json())
+    .then(arr => {
+        arr.forEach(obj => {
+            quotesArrOfObj.push(obj);
+        });
+    })
+    .then( () => quotesArrOfObj);
+};
+
+function newLike (e) {
+    let targetQuote = e.target.parentNode;
+    let quoteId = targetQuote.id;
+    let createdAt = // figure out .date
+};
+
+function postMsgFormat () {
+    let postConfig = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        body: JSON.stringify({
+            "likes": newLike,
+        }),
+    };
+    return postConfig;
+};
+
+function buildSingleQuoteDom () {
+
+    // eventlistener on like button click, triggering newLike();
+};
+
 
 
 
