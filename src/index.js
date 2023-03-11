@@ -1,11 +1,31 @@
 
+const currentQuotesUrl = "http://localhost:3000/quotes";
+const currentQuotesAndLikesUrl = "http://localhost:3000/quotes?_embed=likes";
+
+// const = 
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    fetchCurrentDbQuotes();
+
+    function fetchCurrentDbQuotes () {
+        let quotesArrOfObj = [];
+        fetch(currentQuotesUrl)
+        .then(res => res.json())
+        .then(arr => {
+            arr.forEach(obj => {
+                quotesArrOfObj.push(obj);
+            });
+        })
+        .then( () => console.log(quotesArrOfObj));
+    };
     
+    function buildSingleQuoteDom () {
+
+    };
+
 
 });
-
 
 
 
