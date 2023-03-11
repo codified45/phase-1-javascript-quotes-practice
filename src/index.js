@@ -23,9 +23,9 @@ function fetchCurrentDbQuotes () {
 };
 
 function newLike (e) {
+    let createdAt = Date.now();
     let targetQuote = e.target.parentNode;
     let quoteId = targetQuote.id;
-    let createdAt = // figure out .date
 };
 
 function postMsgFormat () {
