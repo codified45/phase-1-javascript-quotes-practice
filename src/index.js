@@ -3,104 +3,121 @@ const currentQuotesUrl = "http://localhost:3000/quotes";
 const currentLikesUrl = "http://localhost:3000/likes";
 const currentQuotesAndLikesUrl = "http://localhost:3000/quotes?_embed=likes";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
+    const quoteListContainer = document.getElementById('quote-list');
 
-    fetchCurrentDbQuotes();
+    populatePageWithQuotesAndLikes();
 
+    function fetchCurrentDbQuotes() {
+        fetch(currentQuotesUrl)
+        .then(res => res.json())
+        .then(arr => {
+            for (const obj of arr) {
+                console.log(obj);
+            }
+        });
+    };
+
+    function fetchCurrentDbQuotesAndLikes() {
+        fetch(currentQuotesAndLikesUrl)
+        .then(res => res.json())
+        .then(arr => {
+            for (const obj of arr) {
+                console.log(obj);
+                quoteListContainer.append(buildSingleQuoteDom(obj));
+            }
+        });
+    };
+
+    function populatePageWithQuotesAndLikes() {
+        fetchCurrentDbQuotesAndLikes();
+    };
+
+    function newLike(e) {
+        let createdAt = Date.now();
+        let targetQuote = e.target.parentNode;
+        let quoteId = targetQuote.id;
+        let like = {
+            quoteId: quoteId,
+            createdAt: createdAt,
+        };
+        return like;
+    };
+
+    function postLikeMsgFormat(newLike) {
+        let postConfig = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify({
+                "likes": newLike,
+            }),
+        };
+        return postConfig;
+    };
+
+    function editQuote(e) { // check if input field changed at all.  
+        let targetQuote = e.target.parentNode; // this would work if edit form is child 
+        let quoteId = targetQuote.id;
+        let quoteFieldFormInput = input.textContent; // need to choose the input field correctly
+        let modifiedQuote = {
+            id: quoteId, //how do I match id in a PATCH?/to correctly patch correct entry?
+            quote: quoteFieldFormInput,
+        };
+        return modifiedQuote;
+    };
+
+    function patchMsgFormat(modifiedQuote) {
+        let patchConfig = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify({
+                "quotes": modifiedQuote,
+            }),
+        };
+        return patchConfig;
+    };
+
+    function buildSingleQuoteDom(quoteObj) {
+        let id = quoteObj.id // add this to whatever node will be targeted 
+        // let (count the number of elements in likes array for this object, then interpolate this value below)
+        // add form for editing quote (hidden)
+        let li = document.createElement('li');
+        li.classList.add('quote-card');
+        let bquote = document.createElement('blockquote');
+        bquote.classList.add('blockquote');
+        let p = document.createElement('p');
+        p.classList.add('mb-0');
+        p.textContent = quoteObj.quote;
+        let footer = document.createElement('footer');
+        footer.classList.add('blockquote-footer');
+        footer.textContent = quoteObj.author;
+        let br = document.createElement('br');
+        let likeBtn = document.createElement('button');
+        likeBtn.classList.add('btn-success');
+        likeBtn.textContent = `Likes: interpolate likes`; // finish
+        likeBtn.id = `likeBtn${id}`;
+        likeBtn.addEventListener('click', newLike);
+        let dltBtn = document.createElement('button');
+        dltBtn.classList.add('btn-danger');
+        dltBtn.textContent = "Delete";
+        dltBtn.id = `dltBtn${id}`;
+        dltBtn.addEventListener('click', dltQuote);
+        bquote.append(p, footer, br, likeBtn, dltBtn);
+        li.append(bquote);
+        return li;
+    }; 
+
+    function dltQuote() {
+        console.log('I\'m in dltQuote');
+    };
 
 });
-
-function fetchCurrentDbQuotes () {
-    let quotesArrOfObj = [];
-    fetch(currentQuotesUrl)
-    .then(res => res.json())
-    .then(arr => {
-        arr.forEach(obj => {
-            quotesArrOfObj.push(obj);
-        });
-    })
-    .then( () => quotesArrOfObj);
-};
-
-function newLike (e) {
-    let createdAt = Date.now();
-    let targetQuote = e.target.parentNode;
-    let quoteId = targetQuote.id;
-    let like = {
-        quoteId: quoteId,
-        createdAt: createdAt,
-    };
-    return like;
-};
-
-function postLikeMsgFormat (newLike) {
-    let postConfig = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        body: JSON.stringify({
-            "likes": newLike,
-        }),
-    };
-    return postConfig;
-};
-
-function editQuote (e) { // check if input field changed at all.  
-    let targetQuote = e.target.parentNode; // this would work if edit form is child 
-    let quoteId = targetQuote.id;
-    let quoteFieldFormInput = input.textContent; // need to choose the input field correctly
-    let modifiedQuote = {
-        id: quoteId, //how do I match id in a PATCH?/to correctly patch correct entry?
-        quote: quoteFieldFormInput,
-    };
-    return modifiedQuote;
-};
-
-function patchMsgFormat (modifiedQuote) {
-    let patchConfig = {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        body: JSON.stringify({
-            "quotes": modifiedQuote,
-        }),
-    };
-    return patchConfig;
-};
-
-function buildSingleQuoteDom (quoteObj) {
-    let id = quoteObj.id 
-    let li = document.createElement('li');
-    li.classList.add('quote-card');
-    let bquote = document.createElement('blockquote');
-    bquote.classList.add('blockquote');
-    let p = document.createElement('p');
-    p.classList.add('mb-0');
-    p.textContent = quoteObj.quote;
-
-    let footer = document.createElement('footer');
-    footer.classList.add('blockquote-footer');
-    footer.textContent = quoteObj.author;
-
-    let br = document.createElement('br');
-    let buttonLike = document.createElement('button');
-    buttonLike.classList.add('btn-success');
-    buttonLike.textContent = `Likes: interpolate likes`; // finish
-    buttonLike.addEventListener('click', newLike);
-    let buttonDlt = document.createElement('button');
-    buttonDlt.classList.add('btn-danger');
-    buttonDlt.textContent = "Delete";
-    bquote.appendChildren(p, footer, br, buttonLike, buttonDlt);
-    li.appendChild(bquote);
-
-    // eventlistener on like button click, triggering newLike(); should pass quoteId (or at least event object to newLike)
-};  // can probably use a forEach to replicated for every quote object in db array. 
-
-
 
 
 /*
