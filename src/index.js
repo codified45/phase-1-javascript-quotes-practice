@@ -72,21 +72,30 @@ function patchMsgFormat (modifiedQuote) {
     return patchConfig;
 };
 
-function buildSingleQuoteDom () {
+function buildSingleQuoteDom (quoteObj) {
+    let id = quoteObj.id 
     let li = document.createElement('li');
     li.classList.add('quote-card');
     let bquote = document.createElement('blockquote');
     bquote.classList.add('blockquote');
     let p = document.createElement('p');
+    p.classList.add('mb-0');
+    p.textContent = quoteObj.quote;
+
     let footer = document.createElement('footer');
+    footer.classList.add('blockquote-footer');
+    footer.textContent = quoteObj.author;
+
     let br = document.createElement('br');
-    let buttonLike = document.createElement('blockquote');
-    let buttonDlt = document.createElement('blockquote');
-    
+    let buttonLike = document.createElement('button');
+    buttonLike.classList.add('btn-success');
+    buttonLike.textContent = `Likes: interpolate likes`; // finish
+    buttonLike.addEventListener('click', newLike);
+    let buttonDlt = document.createElement('button');
+    buttonDlt.classList.add('btn-danger');
+    buttonDlt.textContent = "Delete";
     bquote.appendChildren(p, footer, br, buttonLike, buttonDlt);
     li.appendChild(bquote);
-
-    
 
     // eventlistener on like button click, triggering newLike(); should pass quoteId (or at least event object to newLike)
 };  // can probably use a forEach to replicated for every quote object in db array. 
