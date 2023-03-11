@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(arr => {
             for (const obj of arr) {
                 console.log(obj);
-            }
+            };
         });
     };
 
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
             for (const obj of arr) {
                 console.log(obj);
                 quoteListContainer.append(buildSingleQuoteDom(obj));
-            }
+            };
         });
     };
 
@@ -84,8 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     function buildSingleQuoteDom(quoteObj) {
-        let id = quoteObj.id // add this to whatever node will be targeted 
-        // let (count the number of elements in likes array for this object, then interpolate this value below)
+        let id = quoteObj.id;
         // add form for editing quote (hidden)
         let li = document.createElement('li');
         li.classList.add('quote-card');
@@ -125,9 +124,10 @@ document.addEventListener("DOMContentLoaded", function() {
             },
         };
         let deleteUrl = currentQuotesUrl + `/${btnIdNum}`;
-        console.log(deleteConfig);
-        fetch(deleteUrl, deleteConfig)
-        // .then(res => res.json());
+        fetch(deleteUrl, deleteConfig);
+        let bquote = document.getElementById(btnIdNum);
+        let dltLi = bquote.parentNode;
+        dltLi.remove();
     };
 
 });
