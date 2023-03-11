@@ -33,7 +33,7 @@ function newLike (e) {
     return like;
 };
 
-function postMsgFormat () {
+function postLikeMsgFormat (newLike) {
     let postConfig = {
         method: "POST",
         headers: {
@@ -45,6 +45,16 @@ function postMsgFormat () {
         }),
     };
     return postConfig;
+};
+
+function editQuote (e) { // check if input field changed at all.  
+    let targetQuote = e.target.parentNode; // this would work if form is child 
+    let quoteId = targetQuote.id;
+    let modifiedQuote = {
+        quoteId: quoteId,
+        createdAt: createdAt,
+    };
+    return like;
 };
 
 function patchMsgFormat () {
