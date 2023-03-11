@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
         li.classList.add('quote-card');
         let bquote = document.createElement('blockquote');
         bquote.classList.add('blockquote');
+        bquote.id = id;
         let p = document.createElement('p');
         p.classList.add('mb-0');
         p.textContent = quoteObj.quote;
@@ -114,8 +115,19 @@ document.addEventListener("DOMContentLoaded", function() {
         return li;
     }; 
 
-    function dltQuote() {
-        console.log('I\'m in dltQuote');
+    function dltQuote(e) {
+        let btnIdNum = e.target.parentNode.id;
+        let deleteConfig = {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        };
+        let deleteUrl = currentQuotesUrl + `/${btnIdNum}`;
+        console.log(deleteConfig);
+        fetch(deleteUrl, deleteConfig)
+        // .then(res => res.json());
     };
 
 });
