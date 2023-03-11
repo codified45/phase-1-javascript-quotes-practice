@@ -26,6 +26,11 @@ function newLike (e) {
     let createdAt = Date.now();
     let targetQuote = e.target.parentNode;
     let quoteId = targetQuote.id;
+    let like = {
+        quoteId: quoteId,
+        createdAt: createdAt,
+    };
+    return like;
 };
 
 function postMsgFormat () {
@@ -44,7 +49,7 @@ function postMsgFormat () {
 
 function buildSingleQuoteDom () {
 
-    // eventlistener on like button click, triggering newLike();
+    // eventlistener on like button click, triggering newLike(); should pass quoteId (or at least event object to newLike)
 };
 
 
