@@ -48,16 +48,17 @@ function postLikeMsgFormat (newLike) {
 };
 
 function editQuote (e) { // check if input field changed at all.  
-    let targetQuote = e.target.parentNode; // this would work if form is child 
+    let targetQuote = e.target.parentNode; // this would work if edit form is child 
     let quoteId = targetQuote.id;
+    let quoteFieldFormInput = input.textContent; // need to choose the input field correctly
     let modifiedQuote = {
-        quoteId: quoteId,
-        createdAt: createdAt,
+        id: quoteId, //how do I match id in a PATCH?/to correctly patch correct entry?
+        quote: quoteFieldFormInput,
     };
-    return like;
+    return modifiedQuote;
 };
 
-function patchMsgFormat () {
+function patchMsgFormat (modifiedQuote) {
     let patchConfig = {
         method: "PATCH",
         headers: {
@@ -72,9 +73,23 @@ function patchMsgFormat () {
 };
 
 function buildSingleQuoteDom () {
+    let li = document.createElement('li');
+    li.classList.add('quote-card');
+    let bquote = document.createElement('blockquote');
+    bquote.classList.add('blockquote');
+    let p = document.createElement('p');
+    let footer = document.createElement('footer');
+    let br = document.createElement('br');
+    let buttonLike = document.createElement('blockquote');
+    let buttonDlt = document.createElement('blockquote');
+    
+    bquote.appendChildren(p, footer, br, buttonLike, buttonDlt);
+    li.appendChild(bquote);
+
+    
 
     // eventlistener on like button click, triggering newLike(); should pass quoteId (or at least event object to newLike)
-};
+};  // can probably use a forEach to replicated for every quote object in db array. 
 
 
 
