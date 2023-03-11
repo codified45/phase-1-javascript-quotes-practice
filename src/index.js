@@ -47,6 +47,20 @@ function postMsgFormat () {
     return postConfig;
 };
 
+function patchMsgFormat () {
+    let patchConfig = {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        body: JSON.stringify({
+            "quotes": modifiedQuote,
+        }),
+    };
+    return patchConfig;
+};
+
 function buildSingleQuoteDom () {
 
     // eventlistener on like button click, triggering newLike(); should pass quoteId (or at least event object to newLike)
