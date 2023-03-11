@@ -98,9 +98,10 @@ document.addEventListener("DOMContentLoaded", function() {
         footer.classList.add('blockquote-footer');
         footer.textContent = quoteObj.author;
         let br = document.createElement('br');
+        let numberOfLikes = quoteObj.likes.length;
         let likeBtn = document.createElement('button');
         likeBtn.classList.add('btn-success');
-        likeBtn.textContent = `Likes: interpolate likes`; // finish
+        likeBtn.textContent = `Likes: ${numberOfLikes}`;
         likeBtn.id = `likeBtn${id}`;
         likeBtn.addEventListener('click', newLike);
         let dltBtn = document.createElement('button');
