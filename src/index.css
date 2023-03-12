@@ -2,6 +2,11 @@
   padding: 20px;
 }
 
-.edit-form {
-  display: hidden;
+.edit-form-hidden {
+  display: none;
 }
+
+.edit-form-visible {
+  display: flex;
+}
+

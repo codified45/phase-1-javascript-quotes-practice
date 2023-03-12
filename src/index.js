@@ -116,15 +116,28 @@ document.addEventListener("DOMContentLoaded", function() {
         editBtn.textContent = "Edit Quote";
         editBtn.id = `editBtn${id}`;
         editBtn.addEventListener('click', editQuote);
-        bquote.append(p, footer, br, likeBtn, dltBtn, editBtn);
+        let form = document.createElement('form');
+        form.classList.add('edit-form');
+        let textInput = document.createElement('input');
+        textInput.type = "text";
+        let textSubmit = document.createElement('input');
+        textSubmit.type = "submit";
+        form.append(textInput, textSubmit);
+        form.addEventListener('submit', editQuote);
+        form.className = "edit-form-hidden";
+        bquote.append(p, footer, br, likeBtn, dltBtn, editBtn, form);
         li.append(bquote);
         return li;
     };
 
     function editQuote(e) { // PATCH
+        e.preventDefault();
         console.log('I\'m in editQuote');
+        console.log(e.target.nextSibling);
+        let form = e.target.nextSibling;
+        form.className = "edit-form-visible";
         // let modifiedQuote = the textcontent of input field in edit form
-        patchMsgFormat(modifiedQuote)
+        // patchMsgFormat(modifiedQuote)
     };
 
     function submitNewQuote(e) { //POST
