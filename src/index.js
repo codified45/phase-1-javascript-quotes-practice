@@ -64,17 +64,16 @@ document.addEventListener("DOMContentLoaded", function() {
         e.preventDefault();
         let form = e.target;
         let textInput = form.querySelector('.text-input');
-        console.log(textInput.value);
+        let quoteFormInput = textInput.value;
         let quoteId = form.id;
-            // let targetQuote = e.target.parentNode; // this would work if edit form is child 
-            // let quoteId = targetQuote.id;
-            // let quoteFieldFormInput = input.textContent; // need to choose the input field correctly
         let modifiedQuote = {
-            id: quoteId, //how do I match id in a PATCH?/to correctly patch correct entry?
-            quote: quoteFieldFormInput,
+            id: quoteId,
+            quote: quoteFormInput,
         };
         form.className = "edit-form-hidden";
-        return modifiedQuote;
+        let patchUrl = currentQuotesUrl + '/' + quoteId;
+        console.log(patchUrl);
+        fetch(patchUrl, patchMsgFormat(modifiedQuote))
     };
 
     function patchMsgFormat(modifiedQuote) {
