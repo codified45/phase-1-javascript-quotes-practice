@@ -109,10 +109,20 @@ document.addEventListener("DOMContentLoaded", function() {
         dltBtn.textContent = "Delete";
         dltBtn.id = `dltBtn${id}`;
         dltBtn.addEventListener('click', dltQuote);
-        bquote.append(p, footer, br, likeBtn, dltBtn);
+        let editBtn = document.createElement('button');
+        editBtn.classList.add('btn-edit');
+        editBtn.textContent = "Edit Quote";
+        editBtn.id = `editBtn${id}`;
+        editBtn.addEventListener('click', editQuote);
+        bquote.append(p, footer, br, likeBtn, dltBtn, editBtn);
         li.append(bquote);
         return li;
-    }; 
+    };
+
+    function editQuote(e) {
+        console.log('I\'m in editQuote');
+        
+    };
 
     function dltQuote(e) {
         let btnIdNum = e.target.parentNode.id;
