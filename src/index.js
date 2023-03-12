@@ -5,6 +5,8 @@ const currentQuotesAndLikesUrl = "http://localhost:3000/quotes?_embed=likes";
 
 document.addEventListener("DOMContentLoaded", function() {
     const quoteListContainer = document.getElementById('quote-list');
+    const newQuoteForm = document.getElementById('new-quote-form');
+    newQuoteForm.addEventListener('submit', submitNewQuote);
 
     populatePageWithQuotesAndLikes();
 
@@ -119,8 +121,14 @@ document.addEventListener("DOMContentLoaded", function() {
         return li;
     };
 
-    function editQuote(e) {
+    function editQuote(e) { // PATCH
         console.log('I\'m in editQuote');
+        // let modifiedQuote = the textcontent of input field in edit form
+        patchMsgFormat(modifiedQuote)
+    };
+
+    function submitNewQuote(e) { //POST
+        e.preventDefault();
         
     };
 
@@ -147,9 +155,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 pessimistic rendering is recommended. 
 
-Populate page with quotes with a GET request to http://localhost:3000/quotes?_embed=likes. The query string in this URL tells json-server to include the likes for a quote in the JSON of the response. You should not use this query string when creating or deleting a quote.
+1. (done) Populate page with quotes with a GET request to http://localhost:3000/quotes?_embed=likes. The query string in this URL tells json-server to include the likes for a quote in the JSON of the response. You should not use this query string when creating or deleting a quote.
 
-Each quote should have the following structure:
+2. (done) Each quote should have the following structure:
 
     <li class='quote-card'>
       <blockquote class="blockquote">
@@ -160,7 +168,7 @@ Each quote should have the following structure:
         <button class='btn-danger'>Delete</button>
       </blockquote>
     </li>
-Submitting the form creates a new quote and adds it to the list of quotes without having to refresh the page. Pessimistic rendering is recommended.
+3. () Submitting the form creates a new quote and adds it to the list of quotes without having to refresh the page. Pessimistic rendering is recommended.
 
 Clicking the delete button should delete the respective quote from the API and remove it from the page without having to refresh.
 
