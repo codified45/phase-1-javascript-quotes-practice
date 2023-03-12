@@ -60,14 +60,20 @@ document.addEventListener("DOMContentLoaded", function() {
         return postConfig;
     };
 
-    function editQuote(e) { // check if input field changed at all.  
-        let targetQuote = e.target.parentNode; // this would work if edit form is child 
-        let quoteId = targetQuote.id;
-        let quoteFieldFormInput = input.textContent; // need to choose the input field correctly
+    function editQuote(e) {
+        e.preventDefault();
+        let form = e.target;
+        let textInput = form.querySelector('.text-input');
+        console.log(textInput.value);
+        let quoteId = form.id;
+            // let targetQuote = e.target.parentNode; // this would work if edit form is child 
+            // let quoteId = targetQuote.id;
+            // let quoteFieldFormInput = input.textContent; // need to choose the input field correctly
         let modifiedQuote = {
             id: quoteId, //how do I match id in a PATCH?/to correctly patch correct entry?
             quote: quoteFieldFormInput,
         };
+        form.className = "edit-form-hidden";
         return modifiedQuote;
     };
 
@@ -87,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function buildSingleQuoteDom(quoteObj) {
         let id = quoteObj.id;
-        // add form for editing quote (hidden)
         let li = document.createElement('li');
         li.classList.add('quote-card');
         let bquote = document.createElement('blockquote');
@@ -115,29 +120,25 @@ document.addEventListener("DOMContentLoaded", function() {
         editBtn.classList.add('btn-edit');
         editBtn.textContent = "Edit Quote";
         editBtn.id = `editBtn${id}`;
-        editBtn.addEventListener('click', editQuote);
+        editBtn.addEventListener('click', showForm);
         let form = document.createElement('form');
-        form.classList.add('edit-form');
+        form.id = id;
         let textInput = document.createElement('input');
         textInput.type = "text";
+        textInput.className = 'text-input';
         let textSubmit = document.createElement('input');
         textSubmit.type = "submit";
         form.append(textInput, textSubmit);
-        form.addEventListener('submit', editQuote);
         form.className = "edit-form-hidden";
+        form.addEventListener('submit', editQuote); // can also change to click, but I think thats bad practice (hitting enter to submit should work too)
         bquote.append(p, footer, br, likeBtn, dltBtn, editBtn, form);
         li.append(bquote);
         return li;
     };
 
-    function editQuote(e) { // PATCH
-        e.preventDefault();
-        console.log('I\'m in editQuote');
-        console.log(e.target.nextSibling);
+    function showForm(e) {
         let form = e.target.nextSibling;
         form.className = "edit-form-visible";
-        // let modifiedQuote = the textcontent of input field in edit form
-        // patchMsgFormat(modifiedQuote)
     };
 
     function submitNewQuote(e) { //POST
