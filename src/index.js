@@ -241,9 +241,6 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     function sortByAuthorViaJs(e) {
-        console.log(e.target.textContent);
-        console.log(e.target);
-        console.log(e.target.value);
         quoteListContainer.replaceChildren();
         if (e.target.value === "off") {
             e.target.value = "on";
@@ -252,6 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(res => res.json())
             .then(arr => {
             console.log(arr);
+            arr.sort(function(a,b))  // I should test this in a less complicated environment
             for (const obj of arr) { //sort first
                 console.log(obj);
                 console.log(obj.author);
@@ -342,7 +340,7 @@ One way of doing this is to sort the quotes in JS after you've retrieved them fr
 
 13. () What are the pros and cons in doing the sorting on the client vs. the server? Discuss with a partner.
     - with sortByAuthorViaFetch() it was painful to incorporate the live Like amount, since the sorted by author list did not include this data. A seperate fetch had to be made.
-    - 
+    - with sortByAuthorViaJs(), a sorting function had to be implemented from scratch on the object.author property, which was a challenge.  
 
 Conclusion
 Building an application like this is a typical interview exercise. It's not uncommon to be set in front of a foreign computer (or asked to bring your own) and to receive a specification like this.
