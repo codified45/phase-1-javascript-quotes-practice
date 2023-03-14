@@ -249,8 +249,10 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(res => res.json())
             .then(arr => {
             console.log(arr);
-            arr.sort(function(a,b))  // I should test this in a less complicated environment
-            for (const obj of arr) { //sort first
+            arr.sort(function(a, b) {
+                return ((a.author < b.author) ? -1 : ((a.author > b.author) ? 1 : 0));
+                });
+            for (const obj of arr) {
                 console.log(obj);
                 console.log(obj.author);
                 quoteListContainer.append(buildSingleQuoteDom(obj));
