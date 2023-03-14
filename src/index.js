@@ -38,14 +38,21 @@ document.addEventListener("DOMContentLoaded", function() {
     function newLike(e) {
         let createdAt = Date.now();
         let targetQuote = e.target.parentNode;
-        let quoteId = targetQuote.id;
+        let quoteId = Number.parseInt(targetQuote.id);
         let like = {
             quoteId: quoteId,
             createdAt: createdAt,
         };
         fetch(currentLikesUrl, postLikeMsgFormat(like))
         .then(res => res.json())
-
+        .then(arr => {
+            console.log(arr);
+            console.log(e.target.textContent);
+            btnText = e.target.textContent;
+            btnLikeNum = Number.parseInt(btnText.slice(7));
+            console.log(btnLikeNum);
+            e.target.textContent = `Likes: ${btnLikeNum+1}`;
+        });
     };
 
     function postLikeMsgFormat(newLike) {
@@ -55,25 +62,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             },
-            body: JSON.stringify({
-                "likes": newLike,
-            }),
+            body: JSON.stringify(newLike),
         };
         return postConfig;
     };
-
-    // function postNewLike() {
-
-    //     let postLikehUrl = currentLikesUrl + '/' + quoteId;
-    //     fetch(currentLikesUrl, )
-    // };
 
     function editQuote(e) {
         e.preventDefault();
         let form = e.target;
         let textInput = form.querySelector('.text-input');
         let quoteFormInput = textInput.value;
-        let quoteId = form.id;
+        let quoteId = Number.parseInt(form.id);
         let modifiedQuote = {
             id: quoteId,
             quote: quoteFormInput,
