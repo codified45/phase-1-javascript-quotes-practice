@@ -145,9 +145,81 @@ document.addEventListener("DOMContentLoaded", function() {
         form.className = "edit-form-visible";
     };
 
-    function submitNewQuote(e) { //POST
+    function postQuoteMsgFormat(newQuote) {
+        let postQuoteConfig = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(newQuote),
+        };
+        return postQuoteConfig;
+    };
+
+    function submitNewQuote(e) {
         e.preventDefault();
-        
+        console.log(newQuoteForm.author);
+        console.log(newQuoteForm.author.value);
+        console.log(newQuoteForm.quote.value);
+        let quote = newQuoteForm.quote.value;
+        let author = newQuoteForm.author.value;
+        let newQuote = {
+            quote: quote,
+            author: author,
+        };
+        fetch(currentQuotesUrl, postQuoteMsgFormat(newQuote))
+        .then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            quoteListContainer.append(buildSingleNewQuoteDom(obj));
+            newQuoteForm.reset();
+            });
+    };
+
+    function buildSingleNewQuoteDom(quoteObj) {
+        let id = quoteObj.id;
+        let li = document.createElement('li');
+        li.classList.add('quote-card');
+        let bquote = document.createElement('blockquote');
+        bquote.classList.add('blockquote');
+        bquote.id = id;
+        let p = document.createElement('p');
+        p.classList.add('mb-0');
+        p.textContent = quoteObj.quote;
+        let footer = document.createElement('footer');
+        footer.classList.add('blockquote-footer');
+        footer.textContent = quoteObj.author;
+        let br = document.createElement('br');
+        let numberOfLikes = 0;
+        let likeBtn = document.createElement('button');
+        likeBtn.classList.add('btn-success');
+        likeBtn.textContent = `Likes: ${numberOfLikes}`;
+        likeBtn.id = `likeBtn${id}`;
+        likeBtn.addEventListener('click', newLike);
+        let dltBtn = document.createElement('button');
+        dltBtn.classList.add('btn-danger');
+        dltBtn.textContent = "Delete";
+        dltBtn.id = `dltBtn${id}`;
+        dltBtn.addEventListener('click', dltQuote);
+        let editBtn = document.createElement('button');
+        editBtn.classList.add('btn-edit');
+        editBtn.textContent = "Edit Quote";
+        editBtn.id = `editBtn${id}`;
+        editBtn.addEventListener('click', showForm);
+        let form = document.createElement('form');
+        form.id = id;
+        let textInput = document.createElement('input');
+        textInput.type = "text";
+        textInput.className = 'text-input';
+        let textSubmit = document.createElement('input');
+        textSubmit.type = "submit";
+        form.append(textInput, textSubmit);
+        form.className = "edit-form-hidden";
+        form.addEventListener('submit', editQuote); // can also change to click, but I think thats bad practice (hitting enter to submit should work too)
+        bquote.append(p, footer, br, likeBtn, dltBtn, editBtn, form);
+        li.append(bquote);
+        return li;
     };
 
     function dltQuote(e) {
