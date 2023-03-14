@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const sortBtn = document.getElementById('srtBtn');
     sortBtn.addEventListener('click', sortByAuthorViaJs);       // option 1
     // sortBtn.addEventListener('click', sortByAuthorViaFetch); // option 2
-
     populatePageWithQuotesAndLikes();
 
     function fetchCurrentDbQuotesAndLikes() {
@@ -40,11 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(currentLikesUrl, postLikeMsgFormat(like))
         .then(res => res.json())
         .then(arr => {
-            console.log(arr);
-            console.log(e.target.textContent);
             btnText = e.target.textContent;
             btnLikeNum = Number.parseInt(btnText.slice(7));
-            console.log(btnLikeNum);
             e.target.textContent = `Likes: ${btnLikeNum+1}`;
         });
     };
@@ -73,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function() {
         };
         form.className = "edit-form-hidden";
         let patchUrl = currentQuotesUrl + '/' + quoteId;
-        console.log(patchUrl);
         fetch(patchUrl, patchMsgFormat(modifiedQuote));
     };
 
@@ -214,11 +209,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function changeLikes(quoteId, likeBtn) {
         let quoteLikeCheckUrl = getQuoteLikesUrl + quoteId;
-        console.log(quoteLikeCheckUrl);
         fetch(quoteLikeCheckUrl)
         .then(res => res.json())
         .then(arr => {
-            console.log(arr.length);
             numberOfLikes = arr.length;
             likeBtn.textContent = `Likes: ${numberOfLikes}`;
         });
@@ -248,13 +241,10 @@ document.addEventListener("DOMContentLoaded", function() {
             fetch(currentQuotesAndLikesUrl)
             .then(res => res.json())
             .then(arr => {
-            console.log(arr);
             arr.sort(function(a, b) {
                 return ((a.author < b.author) ? -1 : ((a.author > b.author) ? 1 : 0));
                 });
             for (const obj of arr) {
-                console.log(obj);
-                console.log(obj.author);
                 quoteListContainer.append(buildSingleQuoteDom(obj));
             };
         });
@@ -263,7 +253,6 @@ document.addEventListener("DOMContentLoaded", function() {
             e.target.textContent = "Sort Quotes: Off"
             populatePageWithQuotesAndLikes();
         };
-        console.log(e.target.value);
     };
 
     function sortByAuthorViaFetch(e) {
@@ -334,14 +323,14 @@ Extend Your Learning
 
 10. (done) Currently, the number of likes of each post does not persist on the frontend after we refresh, as we set the beginning value to 0. Include an additional fetch to always have an updated number of likes for each post. You will send a GET request to http://localhost:3000/likes?quoteId= and interpolate the id of a given post. (did it differently)
 
-11. Add a sort button that can be toggled on or off. When off the list of quotes will appear sorted by the ID. When the sort is active, it will display the quotes by author's name, alphabetically.
+11. (done) Add a sort button that can be toggled on or off. When off the list of quotes will appear sorted by the ID. When the sort is active, it will display the quotes by author's name, alphabetically.
 
 One way of doing this is to sort the quotes in JS after you've retrieved them from the API. Try this way first.
 
-12. Another way of doing this is to make a fetch to http://localhost:3000/quotes?_sort=author
+12. (done) Another way of doing this is to make a fetch to http://localhost:3000/quotes?_sort=author
 
-13. () What are the pros and cons in doing the sorting on the client vs. the server? Discuss with a partner.
-    - with sortByAuthorViaFetch() it was painful to incorporate the live Like amount, since the sorted by author list did not include this data. A seperate fetch had to be made.
+13. (done) What are the pros and cons in doing the sorting on the client vs. the server? Discuss with a partner.
+    - with sortByAuthorViaFetch() you needed to incorporate the live Like amount, since the sorted by author list did not include this data. A seperate fetch had to be made.
     - with sortByAuthorViaJs(), a sorting function had to be implemented from scratch on the object.author property, which was a challenge.  
 
 Conclusion
