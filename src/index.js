@@ -10,27 +10,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const newQuoteForm = document.getElementById('new-quote-form');
     newQuoteForm.addEventListener('submit', submitNewQuote);
     const sortBtn = document.getElementById('srtBtn');
-    // sortBtn.addEventListener('click', sortByAuthorViaJs);
-    sortBtn.addEventListener('click', sortByAuthorViaFetch);
+    sortBtn.addEventListener('click', sortByAuthorViaJs);       // option 1
+    // sortBtn.addEventListener('click', sortByAuthorViaFetch); // option 2
 
     populatePageWithQuotesAndLikes();
-
-    function fetchCurrentDbQuotes() {
-        fetch(currentQuotesUrl)
-        .then(res => res.json())
-        .then(arr => {
-            for (const obj of arr) {
-                console.log(obj);
-            };
-        });
-    };
 
     function fetchCurrentDbQuotesAndLikes() {
         fetch(currentQuotesAndLikesUrl)
         .then(res => res.json())
         .then(arr => {
             for (const obj of arr) {
-                console.log(obj);
                 quoteListContainer.append(buildSingleQuoteDom(obj));
             };
         });
@@ -164,9 +153,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function submitNewQuote(e) {
         e.preventDefault();
-        console.log(newQuoteForm.author);
-        console.log(newQuoteForm.author.value);
-        console.log(newQuoteForm.quote.value);
         let quote = newQuoteForm.quote.value;
         let author = newQuoteForm.author.value;
         let newQuote = {
@@ -176,7 +162,6 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(currentQuotesUrl, postQuoteMsgFormat(newQuote))
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             quoteListContainer.append(buildSingleNewQuoteDom(obj));
             newQuoteForm.reset();
             });
@@ -239,69 +224,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     };
 
-    // function changeLikes(likeBtn, numberOfLikes) {
-    //     likeBtn.textContent = `Likes: ${numberOfLikes}`
-    // };
-
-    // function buildDomAfterAuthorSort(quoteObj) {
-    //     let id = quoteObj.id;
-
-    //     let quoteLikeCheckUrl = getQuoteLikesUrl + id;
-    //     console.log(quoteLikeCheckUrl);
-
-    //     fetch(quoteLikeCheckUrl)
-    //     .then(res => res.json())
-    //     .then(arr => {
-    //         console.log(arr.length);
-    //         let numberOfLikes = arr.length;
-        
-    //         console.log(id);
-    //         console.log(numberOfLikes);
-    //         let li = document.createElement('li');
-    //         li.classList.add('quote-card');
-    //         let bquote = document.createElement('blockquote');
-    //         bquote.classList.add('blockquote');
-    //         bquote.id = id;
-    //         let p = document.createElement('p');
-    //         p.classList.add('mb-0');
-    //         p.textContent = quoteObj.quote;
-    //         let footer = document.createElement('footer');
-    //         footer.classList.add('blockquote-footer');
-    //         footer.textContent = quoteObj.author;
-    //         let br = document.createElement('br');
-    //         let likeBtn = document.createElement('button');
-    //         likeBtn.classList.add('btn-success');
-    //         likeBtn.id = `likeBtn${id}`;
-    //         likeBtn.addEventListener('click', newLike);
-    //         let dltBtn = document.createElement('button');
-    //         dltBtn.classList.add('btn-danger');
-    //         dltBtn.textContent = "Delete";
-    //         dltBtn.id = `dltBtn${id}`;
-    //         dltBtn.addEventListener('click', dltQuote);
-    //         let editBtn = document.createElement('button');
-    //         editBtn.classList.add('btn-edit');
-    //         editBtn.textContent = "Edit Quote";
-    //         editBtn.id = `editBtn${id}`;
-    //         editBtn.addEventListener('click', showForm);
-    //         let form = document.createElement('form');
-    //         form.id = id;
-    //         let textInput = document.createElement('input');
-    //         textInput.type = "text";
-    //         textInput.className = 'text-input';
-    //         let textSubmit = document.createElement('input');
-    //         textSubmit.type = "submit";
-    //         form.append(textInput, textSubmit);
-    //         form.className = "edit-form-hidden";
-    //         form.addEventListener('submit', editQuote);
-    //         likeBtn.textContent = `Likes: ${numberOfLikes}`;
-    //         bquote.append(p, footer, br, likeBtn, dltBtn, editBtn, form);
-    //         li.append(bquote);
-    //         console.log(numberOfLikes);
-    //         return li;
-    //     });
-    // 
-    // };
-
     function dltQuote(e) {
         let btnIdNum = e.target.parentNode.id;
         let deleteConfig = {
@@ -322,24 +244,29 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(e.target.textContent);
         console.log(e.target);
         console.log(e.target.value);
+        quoteListContainer.replaceChildren();
         if (e.target.value === "off") {
             e.target.value = "on";
             e.target.textContent = "Sort Quotes: On";
-            
+            fetch(currentQuotesAndLikesUrl)
+            .then(res => res.json())
+            .then(arr => {
+            console.log(arr);
+            for (const obj of arr) { //sort first
+                console.log(obj);
+                console.log(obj.author);
+                quoteListContainer.append(buildSingleQuoteDom(obj));
+            };
+        });
         } else if (e.target.value === "on") {
             e.target.value = "off";
             e.target.textContent = "Sort Quotes: Off"
-            quoteListContainer.replaceChildren();
             populatePageWithQuotesAndLikes();
         };
         console.log(e.target.value);
-
     };
 
     function sortByAuthorViaFetch(e) {
-        console.log(e.target.textContent);
-        console.log(e.target);
-        console.log(e.target.value);
         quoteListContainer.replaceChildren();
         if (e.target.value === "off") {
             e.target.value = "on";
@@ -348,11 +275,8 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(res => res.json())
             .then(arr => {
                 for (const obj of arr) {
-                    console.log(obj);
-                    console.log(obj.id);
                     quoteListContainer.append(buildSingleNewQuoteDom(obj));
                     let likeBtn = document.getElementById(`likeBtn${obj.id}`);
-                    console.log(likeBtn);
                     changeLikes(obj.id, likeBtn);
                 };
             });
@@ -361,7 +285,16 @@ document.addEventListener("DOMContentLoaded", function() {
             e.target.textContent = "Sort Quotes: Off";
             populatePageWithQuotesAndLikes();
         };
-        console.log(e.target.value);
+    };
+
+    function fetchCurrentDbQuotes() { // unused
+        fetch(currentQuotesUrl)
+        .then(res => res.json())
+        .then(arr => {
+            for (const obj of arr) {
+                quoteListContainer.append(buildSingleQuoteDom(obj));
+            };
+        });
     };
 
 });
@@ -406,7 +339,10 @@ Extend Your Learning
 One way of doing this is to sort the quotes in JS after you've retrieved them from the API. Try this way first.
 
 12. Another way of doing this is to make a fetch to http://localhost:3000/quotes?_sort=author
-What are the pros and cons in doing the sorting on the client vs. the server? Discuss with a partner.
+
+13. () What are the pros and cons in doing the sorting on the client vs. the server? Discuss with a partner.
+    - with sortByAuthorViaFetch() it was painful to incorporate the live Like amount, since the sorted by author list did not include this data. A seperate fetch had to be made.
+    - 
 
 Conclusion
 Building an application like this is a typical interview exercise. It's not uncommon to be set in front of a foreign computer (or asked to bring your own) and to receive a specification like this.
