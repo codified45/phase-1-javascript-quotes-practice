@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", function() {
             quoteId: quoteId,
             createdAt: createdAt,
         };
-        return like;
+        fetch(currentLikesUrl, postLikeMsgFormat(like))
+        .then(res => res.json())
+
     };
 
     function postLikeMsgFormat(newLike) {
@@ -60,6 +62,12 @@ document.addEventListener("DOMContentLoaded", function() {
         return postConfig;
     };
 
+    // function postNewLike() {
+
+    //     let postLikehUrl = currentLikesUrl + '/' + quoteId;
+    //     fetch(currentLikesUrl, )
+    // };
+
     function editQuote(e) {
         e.preventDefault();
         let form = e.target;
@@ -73,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
         form.className = "edit-form-hidden";
         let patchUrl = currentQuotesUrl + '/' + quoteId;
         console.log(patchUrl);
-        fetch(patchUrl, patchMsgFormat(modifiedQuote))
+        fetch(patchUrl, patchMsgFormat(modifiedQuote));
     };
 
     function patchMsgFormat(modifiedQuote) {
@@ -83,9 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             },
-            body: JSON.stringify({
-                "quotes": modifiedQuote,
-            }),
+            body: JSON.stringify(modifiedQuote),
         };
         return patchConfig;
     };
